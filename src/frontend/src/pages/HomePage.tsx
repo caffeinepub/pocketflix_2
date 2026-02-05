@@ -32,22 +32,21 @@ export default function HomePage() {
   // Get hero visuals from admin config
   const heroVisuals = adminConfig?.homepageVisuals;
   const heroImageUrl = heroVisuals?.heroImage?.getDirectURL();
-  const heroBackgroundColor = heroVisuals?.heroBackgroundColor || 'linear-gradient(227deg, #ff9500 0%, #0e1c45 100%)';
   const overlayColor = heroVisuals?.backgroundColorOverlay || '#1A2C45';
   const overlayOpacity = heroVisuals?.overlayOpacity ? Number(heroVisuals.overlayOpacity) / 100 : 0.8;
 
   // Determine background style
   // If admin uploaded a hero image, use it; otherwise fall back to the Ankara pattern
-  const backgroundImageUrl = heroImageUrl || '/assets/generated/hero-bg-ankara-orange-navy-print.dim_2400x1350.png';
-  
-  const backgroundStyle = heroImageUrl || !heroImageUrl
+  const backgroundStyle = heroImageUrl
     ? {
-        backgroundImage: `linear-gradient(rgba(${parseInt(overlayColor.slice(1, 3), 16)}, ${parseInt(overlayColor.slice(3, 5), 16)}, ${parseInt(overlayColor.slice(5, 7), 16)}, ${overlayOpacity}), rgba(${parseInt(overlayColor.slice(1, 3), 16)}, ${parseInt(overlayColor.slice(3, 5), 16)}, ${parseInt(overlayColor.slice(5, 7), 16)}, ${overlayOpacity})), url(${backgroundImageUrl})`,
+        backgroundImage: `linear-gradient(rgba(${parseInt(overlayColor.slice(1, 3), 16)}, ${parseInt(overlayColor.slice(3, 5), 16)}, ${parseInt(overlayColor.slice(5, 7), 16)}, ${overlayOpacity}), rgba(${parseInt(overlayColor.slice(1, 3), 16)}, ${parseInt(overlayColor.slice(3, 5), 16)}, ${parseInt(overlayColor.slice(5, 7), 16)}, ${overlayOpacity})), url(${heroImageUrl})`,
         backgroundSize: 'cover',
         backgroundPosition: 'center',
       }
     : {
-        background: heroBackgroundColor,
+        backgroundImage: `linear-gradient(rgba(${parseInt(overlayColor.slice(1, 3), 16)}, ${parseInt(overlayColor.slice(3, 5), 16)}, ${parseInt(overlayColor.slice(5, 7), 16)}, ${overlayOpacity}), rgba(${parseInt(overlayColor.slice(1, 3), 16)}, ${parseInt(overlayColor.slice(3, 5), 16)}, ${parseInt(overlayColor.slice(5, 7), 16)}, ${overlayOpacity})), url(/assets/generated/hero-bg-ankara-orange-navy-print.dim_2400x1350.png)`,
+        backgroundSize: 'cover',
+        backgroundPosition: 'center',
       };
 
   // Get text content from admin config

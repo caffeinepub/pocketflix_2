@@ -1,88 +1,39 @@
 {
   "kind": "build_request",
-  "title": "Apply orange & navy Ankara-print hero background for a more African-themed homepage",
+  "title": "Expose homepage hero background image upload in Admin “Home Page” tab",
   "priority": "normal",
   "requirements": [
     {
-      "id": "REQ-22",
-      "text": "Generate a new hero background image that visually resembles an orange and navy-blue Ankara (African print) fabric pattern and add it as a static asset under frontend/public/assets/generated.",
+      "id": "REQ-31",
+      "text": "Update the Admin Dashboard UI so admins can clearly find and use the homepage hero/background image upload control from the “Home Page” tab (not only under “Appearance”), by surfacing the existing `HomepageVisualsForm` in an easy-to-discover location within the “Home Page” tab.",
       "target": "frontend",
       "source": {
         "messageIds": [
-          "msg-1"
+          "msg-3"
         ],
         "quotes": [
-          "Design the background with orange and navy blue print Ankara fabric design to make the app look more African themed"
+          "There's no place to upload the background image"
         ]
       },
       "acceptanceCriteria": [
-        "A new image file exists at frontend/public/assets/generated/hero-bg-ankara-orange-navy-print.dim_2400x1350.png",
-        "The image is a seamless-looking Ankara-inspired fabric print with a dominant orange + navy palette and high visual contrast suitable for a hero background"
-      ]
-    },
-    {
-      "id": "REQ-23",
-      "text": "Update the homepage hero background fallback so that when no admin-uploaded hero image is configured, the hero section uses the generated Ankara background image as the default background (while keeping existing overlay/opacity behavior for readability).",
-      "target": "frontend",
-      "source": {
-        "messageIds": [
-          "msg-1",
-          "msg-2"
-        ],
-        "quotes": [
-          "Design the background with orange and navy blue print Ankara fabric design to make the app look more African themed",
-          "Start the build"
-        ]
-      },
-      "acceptanceCriteria": [
-        "If adminConfig.homepageVisuals.heroImage is not set, the HomePage hero renders with background image /assets/generated/hero-bg-ankara-orange-navy-print.dim_2400x1350.png",
-        "If adminConfig.homepageVisuals.heroImage is set, the uploaded image continues to take precedence (no regression)",
-        "Hero text remains readable due to the existing overlay color + opacity logic"
-      ]
-    },
-    {
-      "id": "REQ-24",
-      "text": "Keep all existing admin controls for homepage visuals (image upload, overlay color, overlay opacity, and gradient/color field) working so the logo and text remain editable and the background can still be changed by admins after this update.",
-      "target": "frontend",
-      "source": {
-        "messageIds": [
-          "msg-1"
-        ],
-        "quotes": [
-          "Design the background with orange and navy blue print Ankara fabric design to make the app look more African themed"
-        ]
-      },
-      "acceptanceCriteria": [
-        "Admins can still upload a hero background image from the Admin Dashboard and see it on the homepage hero after saving",
-        "Admins can still adjust overlay color/opacity and see the effect on the homepage hero",
-        "No user-facing text is changed away from English as part of this update"
+        "When an admin opens Admin Dashboard → “Home Page”, there is a visible section for hero/background visuals that includes the hero background image upload control (using the existing `HomepageVisualsForm`).",
+        "An admin can upload a hero background image from the “Home Page” tab and save successfully, and the uploaded image remains visible on refresh (based on settings data).",
+        "An admin can remove the uploaded hero background image from the “Home Page” tab and save successfully, and the UI indicates the default background will be restored.",
+        "No functionality is removed: existing homepage content editing (text) remains available in the “Home Page” tab, and the hero visuals controls (overlay color, overlay opacity, fallback gradient) remain usable.",
+        "All user-facing helper text in the surfaced form remains in English and clearly explains: uploading replaces the default background; removing restores the default after saving."
       ]
     }
   ],
   "constraints": [
-    "Do not modify files under frontend/src/components/ui (read-only components).",
-    "Do not modify frontend/src/hooks/useInternetIdentity.ts, frontend/src/hooks/useInternetIdentity.tsx, frontend/src/hooks/useActor.ts, or frontend/src/main.tsx (immutable paths).",
-    "Backend remains single-actor; no backend changes are required for this request."
+    "Do not edit files under `frontend/src/components/ui` or other frontend immutable paths listed in SYSTEM_CONTEXT.",
+    "Keep the backend as a single Motoko actor; no backend changes are required for this request unless a blocking issue is discovered."
   ],
   "nonGoals": [
-    "Changing backend data models or performing state migrations.",
-    "Adding new admin UI for selecting from multiple built-in background presets (only update the default fallback behavior).",
-    "Changing non-hero areas of the site (admin dashboard visuals, video cards, quiz UI) beyond what is necessary to support the new hero background asset."
+    "Redesigning the entire admin dashboard information architecture beyond making the homepage background upload easy to discover.",
+    "Changing how hero images are stored or served (no blob/storage backend changes)."
   ],
   "imageRequirements": {
-    "required": [
-      "Ankara-inspired fabric print background with dominant orange and navy colors, high-contrast geometric motifs (hero-bg-ankara-orange-navy-print.dim_2400x1350.png)"
-    ],
+    "required": [],
     "edits": []
-  },
-  "userProfileUpdate": {
-    "goalsToAdd": [],
-    "goalsToRemove": [],
-    "preferencesToAdd": [],
-    "preferencesToRemove": [],
-    "miscToAdd": [],
-    "miscToRemove": [],
-    "fieldsToSet": {},
-    "fieldsToDelete": []
   }
 }

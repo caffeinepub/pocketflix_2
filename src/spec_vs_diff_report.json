@@ -1,39 +1,23 @@
 {
   "kind": "spec_vs_diff_report",
   "version": "1.0",
-  "generatedAt": "2026-02-05T19:44:38.689Z",
-  "summary": "HomePage now falls back to an Ankara-pattern hero background URL when no admin-uploaded hero image is set, and admin homepage visuals form defaults were adjusted. The required static image asset itself is not present in the diff, and the hero background style logic appears to always use an image+overlay layer (never the pure gradient background), which may affect expected behavior.",
+  "generatedAt": "2026-02-05T22:21:59.532Z",
+  "summary": "The BuildRequest (REQ-31) requires surfacing the existing `HomepageVisualsForm` (hero/background upload + related controls) within the Admin Dashboard “Home Page” tab. In the provided diff summary, `AdminDashboardPage.tsx` shows updates to the “Home Page” tab header/content editor and a `Separator`, but the truncated snippet does not provide evidence that `HomepageVisualsForm` is actually rendered in the “home” tab content. No other modified file shows the UI placement either (the other changes are documentation/state summaries).",
   "missing_requirements": [
     {
-      "id": "REQ-22",
-      "requirement": "Generate a new hero background image and add it as a static asset at frontend/public/assets/generated/hero-bg-ankara-orange-navy-print.dim_2400x1350.png.",
-      "reason": "The diff shows no added files, and there is no evidence that the required PNG asset was created under frontend/public/assets/generated.",
+      "id": "REQ-31",
+      "requirement": "Surface the existing `HomepageVisualsForm` (including hero/background image upload) in an easy-to-discover section within Admin Dashboard → “Home Page” tab, while keeping existing home content editing and visuals controls usable.",
+      "reason": "The diff snippet for `TabsContent value=\"home\"` shows the Home Page Content header, an Edit Content button, `HomeContentEditor`, and then a `Separator` before truncation; there is no visible evidence in the provided diff summary that `HomepageVisualsForm` is rendered within the “Home Page” tab (or that upload/remove/save helper text and visuals controls are accessible there).",
       "evidence": [
-        "File diff summary shows: ADDED FILES: none"
+        "frontend/src/pages/AdminDashboardPage.tsx (truncated)"
       ]
     }
   ],
-  "hallucinated_features": [
-    {
-      "description": "Added/used upload progress tracking UI/state for hero image uploads (uploadProgress/isUploading and ExternalBlob.withUploadProgress).",
-      "reason": "The BuildRequest did not ask for new upload progress functionality; only to keep existing admin controls working.",
-      "evidence": [
-        "frontend/src/components/admin/HomepageVisualsForm.tsx"
-      ]
-    },
-    {
-      "description": "Changed the default hero background gradient and overlay defaults in the admin visuals form to an orange/navy theme.",
-      "reason": "The BuildRequest only requested changing the homepage hero background fallback image when no admin-uploaded image is configured; it did not request changing default gradient/overlay configuration values in the admin form.",
-      "evidence": [
-        "frontend/src/components/admin/HomepageVisualsForm.tsx"
-      ]
-    }
-  ],
-  "confidence": 0.74,
+  "hallucinated_features": [],
+  "confidence": 0.58,
   "changed_files": [
     "frontend-file-summaries.txt",
-    "frontend/src/components/admin/HomepageVisualsForm.tsx",
-    "frontend/src/pages/HomePage.tsx",
+    "frontend/src/pages/AdminDashboardPage.tsx",
     "project_state.json"
   ]
 }

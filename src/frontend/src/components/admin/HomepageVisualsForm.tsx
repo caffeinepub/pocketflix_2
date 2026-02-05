@@ -69,15 +69,16 @@ export default function HomepageVisualsForm() {
   const handleRemoveImage = () => {
     setHeroImage(null);
     setHeroImagePreview(null);
+    toast.success('Image removed. The default Ankara pattern will be restored after saving.');
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
     try {
-      await updateHomepageVisuals.mutateAsync({
+      // When heroImage is null, we omit it from the payload to restore the default
+      const payload: any = {
         heroBackgroundColor,
-        heroImage: heroImage || undefined,
         backgroundColorOverlay,
         overlayOpacity: BigInt(overlayOpacity),
         headingColor: '#fff',
@@ -89,7 +90,14 @@ export default function HomepageVisualsForm() {
         buttonColor: '#fff',
         buttonTextColor: '#6d53ec',
         bannerBackgroundColor: '#f1e6fc',
-      });
+      };
+
+      // Only include heroImage if it exists
+      if (heroImage) {
+        payload.heroImage = heroImage;
+      }
+
+      await updateHomepageVisuals.mutateAsync(payload);
       toast.success('Homepage visuals updated successfully!');
     } catch (error) {
       console.error('Update homepage visuals error:', error);
@@ -100,9 +108,9 @@ export default function HomepageVisualsForm() {
   return (
     <Card>
       <CardHeader>
-        <CardTitle>Homepage Visuals</CardTitle>
+        <CardTitle>Homepage Hero Background</CardTitle>
         <CardDescription>
-          Customize the hero section background image and colors
+          Customize the hero section background. Upload a custom image to override the default Ankara pattern, or remove it to restore the default.
         </CardDescription>
       </CardHeader>
       <CardContent>
@@ -130,7 +138,7 @@ export default function HomepageVisualsForm() {
               <div className="border-2 border-dashed rounded-lg p-8 text-center">
                 <Upload className="h-8 w-8 mx-auto mb-2 text-muted-foreground" />
                 <Label htmlFor="heroImage" className="cursor-pointer text-sm text-muted-foreground">
-                  Click to upload hero image
+                  Click to upload a custom hero image
                 </Label>
                 <Input
                   id="heroImage"
@@ -145,12 +153,16 @@ export default function HomepageVisualsForm() {
               <Progress value={uploadProgress} className="w-full" />
             )}
             <p className="text-xs text-muted-foreground">
-              If no image is uploaded, the default Ankara pattern will be used
+              <strong>Default:</strong> Beautiful Ankara/African pattern background.
+              <br />
+              <strong>Upload:</strong> Replaces the default with your custom image.
+              <br />
+              <strong>Remove:</strong> Restores the default Ankara pattern after saving.
             </p>
           </div>
 
           <div className="space-y-2">
-            <Label htmlFor="heroBackgroundColor">Hero Background Color/Gradient</Label>
+            <Label htmlFor="heroBackgroundColor">Fallback Background Color/Gradient</Label>
             <Input
               id="heroBackgroundColor"
               type="text"
@@ -159,12 +171,12 @@ export default function HomepageVisualsForm() {
               placeholder="linear-gradient(227deg, #ff9500 0%, #0e1c45 100%)"
             />
             <p className="text-xs text-muted-foreground">
-              Use CSS gradient syntax or solid color (e.g., #ff9500)
+              Use CSS gradient syntax or solid color (e.g., #ff9500). This is used as a fallback if images fail to load.
             </p>
           </div>
 
           <div className="space-y-2">
-            <Label htmlFor="backgroundColorOverlay">Overlay Color (for image)</Label>
+            <Label htmlFor="backgroundColorOverlay">Overlay Color</Label>
             <div className="flex gap-2">
               <Input
                 id="backgroundColorOverlay"
@@ -180,6 +192,9 @@ export default function HomepageVisualsForm() {
                 placeholder="#1A2C45"
               />
             </div>
+            <p className="text-xs text-muted-foreground">
+              Applied over the background image to ensure text readability.
+            </p>
           </div>
 
           <div className="space-y-2">
@@ -193,6 +208,9 @@ export default function HomepageVisualsForm() {
               onChange={(e) => setOverlayOpacity(Number(e.target.value))}
               className="w-full"
             />
+            <p className="text-xs text-muted-foreground">
+              Adjust the darkness of the overlay to balance background visibility and text contrast.
+            </p>
           </div>
 
           <Button type="submit" disabled={updateHomepageVisuals.isPending || isUploading}>

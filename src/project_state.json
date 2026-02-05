@@ -1,6 +1,6 @@
 {
   "schemaVersion": "1.0.0",
-  "projectStateVersion": 14,
+  "projectStateVersion": 20,
   "summary": "Pocketflix is an Internet Computer (ICP) web app for a curated, categorized video-learning catalog (YouTube embeds) with optional per-video quizzes. It uses Internet Identity authentication with role-based admin access. Admins manage categories, videos (including uploaded thumbnails via blob storage), quizzes, users (active/blocked), donation link, and site appearance/content (theme colors, homepage text, homepage hero visuals, and admin dashboard visuals). Users can take quizzes, get scored server-side, see their quiz history, and appear on a privacy-preserving public leaderboard (UI shows top 5).",
   "architectural_notes": [
     "Frontend is a React + TypeScript SPA using TanStack Router for routing and simple route-guard components for /account and /admin.",
@@ -23,10 +23,10 @@
     "Deleting a category does not migrate/update videos in that category; orphaned videos may not appear in tab groupings based on the categories list.",
     "Leaderboard is sorted by timestamp (most recent first) rather than “highest score”; UI labeling like “Top 5” may be misleading versus true top-scoring ranking.",
     "Quiz results are stored in an unbounded List; no retention/cleanup strategy is implemented, which can lead to memory growth over time.",
-    "User-approval workflow APIs exist in the backend (request/list/set approval) but there is no corresponding frontend/admin UI in this snapshot, suggesting partial integration."
+    "User-approval workflow APIs exist in the backend (request/list/set approval) but there is no corresponding frontend/admin UI in this snapshot, suggesting partial integration.",
+    "Admin UI appears to be missing the homepage hero/background image upload control; users report no place to upload the background image."
   ],
-  "isFixRequest": false,
-  "imageRequirements": "## Required Images\n- Ankara-inspired fabric print background with dominant orange and navy colors, high-contrast geometric motifs (hero-bg-ankara-orange-navy-print.dim_2400x1350.png)",
+  "isFixRequest": true,
   "generatedImages": [
     {
       "filename": "frontend/public/assets/generated/hero-bg-abstract-layers.dim_2400x1350.png",
@@ -384,6 +384,54 @@
         "REQ-24"
       ],
       "version": 1
+    },
+    {
+      "id": "feature-update-the-homepage-hero-fallback-background-to-use-an-existing-generated-ankara-african-pattern-asset-path-that-is-present-in-the-repo-and-remove-any-broken-missing-fallback-filename-references-so-the-hero-background-always-renders-correctly-when-no-admin-uploaded-hero-image-is-set",
+      "title": "Update the homepage hero fallback background to use an existing generated Ankara/African pattern asset path that is present in the repo, and remove any broken/missing fallback filename references so the hero background always renders correctly when no admin-uploaded hero image is set.",
+      "reqIds": [
+        "REQ-25"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-fix-the-hero-background-style-branching-logic-on-the-home-page-so-that-it-is-explicit-and-correct-i-e-not-using-a-condition-that-is-always-true-while-preserving-the-intended-behavior-use-the-admin-uploaded-hero-image-when-provided-otherwise-use-the-default-ankara-african-pattern-fallback-with-the-configured-overlay-color-overlay-opacity",
+      "title": "Fix the hero background style branching logic on the Home page so that it is explicit and correct (i.e., not using a condition that is always true), while preserving the intended behavior: use the admin-uploaded hero image when provided; otherwise use the default Ankara/African pattern fallback, with the configured overlay color + overlay opacity.",
+      "reqIds": [
+        "REQ-26"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-enhance-the-visual-quality-of-the-default-ankara-african-pattern-hero-background-image-so-it-looks-significantly-more-polished-higher-perceived-detail-improved-color-harmony-contrast-and-less-repetitive-flat-appearance-while-keeping-the-orange-navy-ankara-print-vibe",
+      "title": "Enhance the visual quality of the default Ankara/African pattern hero background image so it looks significantly more polished (higher perceived detail, improved color harmony/contrast, and less repetitive/flat appearance) while keeping the orange + navy Ankara print vibe.",
+      "reqIds": [
+        "REQ-27"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-ensure-the-admin-panel-clearly-supports-changing-the-ankara-hero-background-by-image-upload-using-the-existing-homepage-hero-image-upload-control-including-user-facing-helper-text-that-explains-uploading-an-image-replaces-the-default-ankara-background-and-removing-the-uploaded-image-restores-the-default-ankara-background",
+      "title": "Ensure the admin panel clearly supports changing the Ankara hero background by image upload (using the existing homepage hero image upload control), including user-facing helper text that explains: uploading an image replaces the default Ankara background, and removing the uploaded image restores the default Ankara background.",
+      "reqIds": [
+        "REQ-28"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-make-the-admin-ui-clearly-provide-a-place-to-upload-replace-remove-the-homepage-hero-background-image-by-surfacing-the-existing-homepagevisualsform-which-contains-the-hero-background-image-upload-control-in-a-location-that-is-easy-to-discover-from-the-home-page-admin-tab",
+      "title": "Make the admin UI clearly provide a place to upload/replace/remove the homepage hero background image, by surfacing the existing HomepageVisualsForm (which contains the hero background image upload control) in a location that is easy to discover from the “Home Page” admin tab.",
+      "reqIds": [
+        "REQ-29"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-update-the-admin-dashboard-ui-so-admins-can-clearly-find-and-use-the-homepage-hero-background-image-upload-control-from-the-home-page-tab-not-only-under-appearance-by-surfacing-the-existing-homepagevisualsform-in-an-easy-to-discover-location-within-the-home-page-tab",
+      "title": "Update the Admin Dashboard UI so admins can clearly find and use the homepage hero/background image upload control from the “Home Page” tab (not only under “Appearance”), by surfacing the existing `HomepageVisualsForm` in an easy-to-discover location within the “Home Page” tab.",
+      "reqIds": [
+        "REQ-31"
+      ],
+      "version": 1
     }
   ],
   "new_feature_requests": [
@@ -391,6 +439,26 @@
       "id": "AR-1",
       "summary": "Update homepage background/hero visuals to an orange and navy-blue Ankara (African print) fabric design to make the app feel more African-themed.",
       "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-2",
+      "summary": "Improve the Ankara print hero background image to look much more beautiful (refine pattern/colors/quality).",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-3",
+      "summary": "Add admin-panel support to change the Ankara print hero background via image upload (so admins can replace/update the default Ankara background from the admin UI).",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-5",
+      "summary": "Ensure the homepage hero default fallback background image URL references an existing generated static asset in the repo, so the hero background renders correctly when no admin-uploaded hero image is set.",
+      "reqIds": [
+        "REQ-30"
+      ],
       "status": "pending"
     }
   ],

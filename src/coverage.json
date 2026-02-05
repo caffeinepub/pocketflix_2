@@ -1,59 +1,34 @@
 {
   "kind": "coverage_report",
   "version": "1.0",
-  "generatedAt": "2026-02-05T19:44:38.692Z",
+  "generatedAt": "2026-02-05T22:21:59.536Z",
   "sources": {
     "buildRequest": true,
     "implementationPlan": true
   },
   "requirements": {
-    "total": 3,
-    "implemented": 3,
+    "total": 1,
+    "implemented": 1,
     "items": [
       {
-        "id": "REQ-22",
-        "summary": "Generate a new hero background image that visually resembles an orange and navy-blue Ankara (African print) fabric pattern and add it as a static asset under frontend/public/assets/generated.",
+        "id": "REQ-31",
+        "summary": "Update the Admin Dashboard UI so admins can clearly find and use the homepage hero/background image upload control from the “Home Page” tab (not only under “Appearance”), by surfacing the existing `HomepageVisualsForm` in an easy-to-discover location within the “Home Page” tab.",
         "status": "implemented",
         "plannedFiles": [
-          "frontend/public/assets/generated/hero-bg-ankara-orange-navy-print.dim_2400x1350.png"
+          "frontend/src/pages/AdminDashboardPage.tsx"
         ],
         "matchedFiles": [
-          "frontend/public/assets/generated/hero-bg-ankara-orange-navy-print.dim_2400x1350.png"
-        ]
-      },
-      {
-        "id": "REQ-23",
-        "summary": "Update the homepage hero background fallback so that when no admin-uploaded hero image is configured, the hero section uses the generated Ankara background image as the default background (while keeping existing overlay/opacity behavior for readability).",
-        "status": "implemented",
-        "plannedFiles": [
-          "frontend/src/pages/HomePage.tsx"
-        ],
-        "matchedFiles": [
-          "frontend/src/pages/HomePage.tsx"
-        ]
-      },
-      {
-        "id": "REQ-24",
-        "summary": "Keep all existing admin controls for homepage visuals (image upload, overlay color, overlay opacity, and gradient/color field) working so the logo and text remain editable and the background can still be changed by admins after this update.",
-        "status": "implemented",
-        "plannedFiles": [
-          "frontend/src/components/admin/HomepageVisualsForm.tsx"
-        ],
-        "matchedFiles": [
-          "frontend/src/components/admin/HomepageVisualsForm.tsx"
+          "frontend/src/pages/AdminDashboardPage.tsx"
         ]
       }
     ]
   },
   "changedFiles": [
     "build-request.json",
-    "caffeine.lock.json",
     "feature_evidence.json",
     "frontend-file-summaries.txt",
     "frontend-implementation-plan.json",
-    "frontend/public/assets/generated/hero-bg-ankara-orange-navy-print.dim_2400x1350.png",
-    "frontend/src/components/admin/HomepageVisualsForm.tsx",
-    "frontend/src/pages/HomePage.tsx",
+    "frontend/src/pages/AdminDashboardPage.tsx",
     "project_state.json",
     "scratch/component-selection.json",
     "spec.md",

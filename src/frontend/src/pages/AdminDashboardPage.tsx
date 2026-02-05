@@ -13,6 +13,7 @@ import { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Edit } from 'lucide-react';
 import { useGetSettingsData } from '../hooks/useQueries';
+import { Separator } from '@/components/ui/separator';
 
 export default function AdminDashboardPage() {
   const [isEditingHome, setIsEditingHome] = useState(false);
@@ -84,6 +85,16 @@ export default function AdminDashboardPage() {
                 </Button>
               </div>
               <HomeContentEditor open={isEditingHome} onOpenChange={setIsEditingHome} />
+
+              <Separator className="my-8" />
+
+              <div className="space-y-4">
+                <div>
+                  <h3 className="text-xl font-semibold">Hero / Background Visuals</h3>
+                  <p className="text-sm text-muted-foreground">Upload a custom hero background image or configure the overlay and fallback settings</p>
+                </div>
+                <HomepageVisualsForm />
+              </div>
             </TabsContent>
 
             <TabsContent value="appearance" className="space-y-6 mt-6">
