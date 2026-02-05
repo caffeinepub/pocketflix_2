@@ -1,0 +1,54 @@
+{
+  "kind": "implementation_plan",
+  "version": "1.0",
+  "title": "Ankara-themed default hero background (orange & navy) with admin-upload precedence",
+  "requirements": [
+    {
+      "id": "REQ-22",
+      "summary": "Add the generated orange & navy Ankara-print hero background image as a static asset under frontend/public/assets/generated.",
+      "acceptanceCriteria": [
+        "A new image file exists at frontend/public/assets/generated/hero-bg-ankara-orange-navy-print.dim_2400x1350.png",
+        "The image is a seamless-looking Ankara-inspired fabric print with a dominant orange + navy palette and high visual contrast suitable for a hero background"
+      ],
+      "file_operations": [
+        {
+          "path": "frontend/public/assets/generated/hero-bg-ankara-orange-navy-print.dim_2400x1350.png",
+          "operation": "create",
+          "description": "Add the provided/generated Ankara-inspired fabric print background image (2400x1350) with dominant orange + navy palette and seamless pattern styling."
+        }
+      ]
+    },
+    {
+      "id": "REQ-23",
+      "summary": "Use the generated Ankara image as the homepage hero background fallback when no admin-uploaded hero image is configured, preserving the existing overlay readability behavior.",
+      "acceptanceCriteria": [
+        "If adminConfig.homepageVisuals.heroImage is not set, the HomePage hero renders with background image /assets/generated/hero-bg-ankara-orange-navy-print.dim_2400x1350.png",
+        "If adminConfig.homepageVisuals.heroImage is set, the uploaded image continues to take precedence (no regression)",
+        "Hero text remains readable due to the existing overlay color + opacity logic"
+      ],
+      "file_operations": [
+        {
+          "path": "frontend/src/pages/HomePage.tsx",
+          "operation": "modify",
+          "description": "Update hero background style resolution so that when homepageVisuals.heroImage is missing, the hero uses the static asset frontend/public/assets/generated/hero-bg-ankara-orange-navy-print.dim_2400x1350.png as the background image while continuing to apply the existing overlay color + opacity logic for text readability; keep admin-uploaded hero image as the higher-precedence source when present."
+        }
+      ]
+    },
+    {
+      "id": "REQ-24",
+      "summary": "Ensure existing admin homepage visuals controls (upload + overlay controls + gradient/color field) continue to function without changing user-facing English text.",
+      "acceptanceCriteria": [
+        "Admins can still upload a hero background image from the Admin Dashboard and see it on the homepage hero after saving",
+        "Admins can still adjust overlay color/opacity and see the effect on the homepage hero",
+        "No user-facing text is changed away from English as part of this update"
+      ],
+      "file_operations": [
+        {
+          "path": "frontend/src/components/admin/HomepageVisualsForm.tsx",
+          "operation": "modify",
+          "description": "Harden state initialization so the hero image preview/state properly clears when no heroImage exists in settings (prevent stale previews), preserving existing upload flow and overlay color/opacity + gradient/color field behavior; do not change any user-facing copy away from English."
+        }
+      ]
+    }
+  ]
+}

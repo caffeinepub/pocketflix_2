@@ -1,0 +1,401 @@
+{
+  "schemaVersion": "1.0.0",
+  "projectStateVersion": 14,
+  "summary": "Pocketflix is an Internet Computer (ICP) web app for a curated, categorized video-learning catalog (YouTube embeds) with optional per-video quizzes. It uses Internet Identity authentication with role-based admin access. Admins manage categories, videos (including uploaded thumbnails via blob storage), quizzes, users (active/blocked), donation link, and site appearance/content (theme colors, homepage text, homepage hero visuals, and admin dashboard visuals). Users can take quizzes, get scored server-side, see their quiz history, and appear on a privacy-preserving public leaderboard (UI shows top 5).",
+  "architectural_notes": [
+    "Frontend is a React + TypeScript SPA using TanStack Router for routing and simple route-guard components for /account and /admin.",
+    "Data access is centralized via @tanstack/react-query hooks (queries + mutations) with explicit cache invalidation for settings/videos/categories/quizzes/leaderboard/users.",
+    "Authentication is via Dfinity AuthClient (Internet Identity). The app creates an anonymous or authenticated canister actor based on identity state.",
+    "Backend is a Motoko canister with RBAC provided by an AccessControl module/mixin; first-time role assignment is initialized using a secret token compared against the CAFFEINE_ADMIN_TOKEN env var.",
+    "A settings aggregation API (getSettingsData) hydrates the homepage and admin UI from a single payload (videos, categories, settings, adminConfig).",
+    "Admin-configurable presentation is stored in backend adminConfig (theme, homepage text, homepage visuals, dashboard visuals) and applied at runtime via CSS variables and inline styles.",
+    "File/blob handling uses an ExternalBlob abstraction and a blob-storage mixin that supports gateway principal syncing, dead-blob discovery/pruning, and cashier refills (cycles).",
+    "Quiz system is implemented server-side (quiz definitions, scoring, result storage) with client UIs for quiz selection/taking and admin quiz CRUD.",
+    "Privacy for the public leaderboard/user lists is handled in the UI by mapping principal text to a stable anonymized label.",
+    "Backend includes a schema migration module (migration.run) to evolve stored structures (notably admin config fields/visuals) across versions."
+  ],
+  "known_issues": [
+    "Most backend state is held in in-memory Maps/Lists without stable persistence; data may be lost on upgrade/reinstall unless migration/stable storage is fully configured and used correctly.",
+    "Access-control initialization traps if CAFFEINE_ADMIN_TOKEN is missing; deployments without this env var will break authenticated actor initialization.",
+    "Storage integration depends on CAFFFEINE_STORAGE_CASHIER_PRINCIPAL (note spelling); misconfiguration will trap at runtime.",
+    "Theme customization writes CSS variables `--theme-primary/--theme-secondary`, but Tailwind’s primary/secondary tokens use `--primary/--secondary`; only components explicitly referencing `--theme-*` will reflect admin theme changes.",
+    "Two CSS variable sets exist (frontend/index.css vs frontend/src/index.css). Only src/index.css is imported, but the duplicate file can cause confusion and mismatched theming expectations.",
+    "Deleting a category does not migrate/update videos in that category; orphaned videos may not appear in tab groupings based on the categories list.",
+    "Leaderboard is sorted by timestamp (most recent first) rather than “highest score”; UI labeling like “Top 5” may be misleading versus true top-scoring ranking.",
+    "Quiz results are stored in an unbounded List; no retention/cleanup strategy is implemented, which can lead to memory growth over time.",
+    "User-approval workflow APIs exist in the backend (request/list/set approval) but there is no corresponding frontend/admin UI in this snapshot, suggesting partial integration."
+  ],
+  "isFixRequest": false,
+  "imageRequirements": "## Required Images\n- Ankara-inspired fabric print background with dominant orange and navy colors, high-contrast geometric motifs (hero-bg-ankara-orange-navy-print.dim_2400x1350.png)",
+  "generatedImages": [
+    {
+      "filename": "frontend/public/assets/generated/hero-bg-abstract-layers.dim_2400x1350.png",
+      "description": "Generated hero background preset (abstract layers)",
+      "targetWidth": 2400,
+      "targetHeight": 1350
+    },
+    {
+      "filename": "frontend/public/assets/generated/hero-bg-african-pattern.dim_2400x1350.png",
+      "description": "Generated hero background preset (african pattern)",
+      "targetWidth": 2400,
+      "targetHeight": 1350
+    },
+    {
+      "filename": "frontend/public/assets/generated/hero-bg-sunrise-landscape.dim_2400x1350.png",
+      "description": "Generated hero background preset (sunrise landscape)",
+      "targetWidth": 2400,
+      "targetHeight": 1350
+    }
+  ],
+  "existing_features": [
+    {
+      "id": "IF-1",
+      "title": "Internet Identity authentication (login/logout)",
+      "synonyms": [
+        "II auth",
+        "AuthClient login",
+        "InternetIdentityProvider"
+      ],
+      "description": "Provides login/logout via Internet Identity using AuthClient, persists identity across reloads, and clears the React Query cache on logout.",
+      "reqIds": [],
+      "version": 1
+    },
+    {
+      "id": "IF-2",
+      "title": "Backend canister actor creation with identity and access-control initialization",
+      "synonyms": [
+        "Actor bootstrapping",
+        "Authenticated actor",
+        "_initializeAccessControlWithSecret"
+      ],
+      "description": "Creates an anonymous or authenticated backend actor depending on login state; on authenticated actor creation, initializes access control using a secret admin token read from the URL hash/session.",
+      "reqIds": [],
+      "version": 1
+    },
+    {
+      "id": "IF-3",
+      "title": "Role-based access control (admin/user/guest)",
+      "synonyms": [
+        "RBAC",
+        "AccessControl",
+        "User roles"
+      ],
+      "description": "Backend tracks user roles per principal and enforces admin-only operations for content/settings management; frontend uses role-aware UI and route guards.",
+      "reqIds": [],
+      "version": 1
+    },
+    {
+      "id": "IF-4",
+      "title": "Route guards and access denied UI",
+      "synonyms": [
+        "Protected routes",
+        "Admin-only route",
+        "AccessDeniedScreen"
+      ],
+      "description": "Guards /account for authenticated users and /admin for admins; shows an Access Denied screen with contextual messaging when unauthorized.",
+      "reqIds": [],
+      "version": 1
+    },
+    {
+      "id": "IF-5",
+      "title": "User profile onboarding and persistence",
+      "synonyms": [
+        "Profile setup modal",
+        "Caller profile"
+      ],
+      "description": "Prompts newly authenticated users to create a profile (name + optional email) and persists it in the canister; provides a hook to fetch the current caller profile.",
+      "reqIds": [],
+      "version": 1
+    },
+    {
+      "id": "IF-6",
+      "title": "Admin user management (list users and set status active/blocked)",
+      "synonyms": [
+        "User moderation",
+        "Block users"
+      ],
+      "description": "Admin dashboard panel lists all user profiles and allows toggling user status; blocked users are prevented from viewing/taking quizzes by backend checks and frontend gating.",
+      "reqIds": [],
+      "version": 1
+    },
+    {
+      "id": "IF-7",
+      "title": "Settings aggregation endpoint and client hooks",
+      "synonyms": [
+        "getSettingsData",
+        "Settings-driven UI"
+      ],
+      "description": "Backend exposes a single SettingsData payload (videos, categories, settings, adminConfig); frontend consumes it via React Query with mutation-driven cache invalidation.",
+      "reqIds": [],
+      "version": 1
+    },
+    {
+      "id": "IF-8",
+      "title": "Home page hero content from admin config (editable)",
+      "synonyms": [
+        "HomeContent",
+        "Hero heading/supporting text"
+      ],
+      "description": "Homepage hero displays admin-configured heading and supporting text with an admin-only editor to persist changes to adminConfig.",
+      "reqIds": [
+        "REQ-19"
+      ],
+      "version": 1
+    },
+    {
+      "id": "IF-9",
+      "title": "Homepage visuals customization (hero background image/gradient + overlay)",
+      "synonyms": [
+        "HomepageVisuals",
+        "Hero image upload"
+      ],
+      "description": "Admins can configure hero background gradient or upload a hero image (ExternalBlob) with overlay color/opacity; homepage renders the configured visuals.",
+      "reqIds": [
+        "REQ-20"
+      ],
+      "version": 1
+    },
+    {
+      "id": "IF-10",
+      "title": "Admin dashboard visuals customization",
+      "synonyms": [
+        "DashboardVisuals",
+        "Admin header gradient"
+      ],
+      "description": "Admins can configure admin dashboard header background and accent/overlay settings stored in adminConfig; AdminDashboardPage applies the configured header styling.",
+      "reqIds": [
+        "REQ-21"
+      ],
+      "version": 1
+    },
+    {
+      "id": "IF-11",
+      "title": "Categorized video catalog on homepage",
+      "synonyms": [
+        "Featured videos",
+        "Category tabs"
+      ],
+      "description": "Renders videos grouped by admin-managed categories using tab navigation, with configurable headings and empty-state messages from adminConfig.",
+      "reqIds": [],
+      "version": 1
+    },
+    {
+      "id": "IF-12",
+      "title": "YouTube embed parsing and video rendering",
+      "synonyms": [
+        "VideoCard",
+        "YouTube URL normalization"
+      ],
+      "description": "Displays videos as embedded YouTube iframes and handles various URL/ID formats with a fallback UI for invalid URLs.",
+      "reqIds": [],
+      "version": 1
+    },
+    {
+      "id": "IF-13",
+      "title": "Admin category management (create/delete)",
+      "synonyms": [
+        "Category CRUD",
+        "Taxonomy management"
+      ],
+      "description": "Admins can add and delete categories in the dashboard with confirmation dialogs and toast feedback.",
+      "reqIds": [],
+      "version": 1
+    },
+    {
+      "id": "IF-14",
+      "title": "Admin video library management (create/update/delete) with thumbnail upload",
+      "synonyms": [
+        "Video CRUD",
+        "ExternalBlob thumbnails"
+      ],
+      "description": "Admins can add/edit/delete videos including title, category, YouTube URL, and thumbnail upload via ExternalBlob with progress tracking.",
+      "reqIds": [],
+      "version": 1
+    },
+    {
+      "id": "IF-15",
+      "title": "Donation CTA with admin-configured link",
+      "synonyms": [
+        "Show Some Love",
+        "Selar link"
+      ],
+      "description": "Displays a donation button that opens the configured donation URL; admins can update the link in the dashboard.",
+      "reqIds": [],
+      "version": 1
+    },
+    {
+      "id": "IF-16",
+      "title": "Admin theme customization (primary/secondary colors)",
+      "synonyms": [
+        "ThemeSettingsForm",
+        "Dynamic theme colors"
+      ],
+      "description": "Admins can set primary/secondary colors stored in adminConfig; frontend applies them via CSS variables for components that reference `--theme-*`.",
+      "reqIds": [],
+      "version": 1
+    },
+    {
+      "id": "IF-17",
+      "title": "Quiz definitions and admin quiz management",
+      "synonyms": [
+        "Quiz CRUD",
+        "QuizEditor"
+      ],
+      "description": "Admins can create, update, and delete quizzes associated with videos, including multi-question multiple-choice content and correct-answer selection with validation.",
+      "reqIds": [],
+      "version": 1
+    },
+    {
+      "id": "IF-18",
+      "title": "Per-video quiz availability for authenticated non-blocked users",
+      "synonyms": [
+        "VideoQuizSection",
+        "Quiz gating"
+      ],
+      "description": "For logged-in users who are not blocked, the UI loads quizzes by video and lets the user select an available quiz to take.",
+      "reqIds": [],
+      "version": 1
+    },
+    {
+      "id": "IF-19",
+      "title": "Quiz taking, scoring, and result recording",
+      "synonyms": [
+        "takeQuiz",
+        "Quiz results"
+      ],
+      "description": "Users submit answers; backend computes score, stores a timestamped result, and the UI shows a results card after submission.",
+      "reqIds": [],
+      "version": 1
+    },
+    {
+      "id": "IF-20",
+      "title": "Post-quiz donation prompt modal",
+      "synonyms": [
+        "PostQuizDonationModal",
+        "Donation upsell"
+      ],
+      "description": "After completing a quiz, the app opens a modal encouraging donation using the configured link, with a dismiss option.",
+      "reqIds": [],
+      "version": 1
+    },
+    {
+      "id": "IF-21",
+      "title": "Public leaderboard with anonymized user labels (top 5 in UI)",
+      "synonyms": [
+        "LeaderboardSection",
+        "Anonymized leaderboard"
+      ],
+      "description": "Displays a privacy-preserving leaderboard using a stable anonymized label derived from the user identifier; UI limits display to 5 entries with medal indicators for top 3.",
+      "reqIds": [
+        "REQ-17",
+        "REQ-18"
+      ],
+      "version": 1
+    },
+    {
+      "id": "IF-22",
+      "title": "Account page showing personal quiz history",
+      "synonyms": [
+        "My results",
+        "Quiz history"
+      ],
+      "description": "Authenticated users can view their own quiz results with timestamps and scores, including loading and empty states.",
+      "reqIds": [],
+      "version": 1
+    },
+    {
+      "id": "IF-23",
+      "title": "Blob-storage gateway integration and maintenance utilities (backend)",
+      "synonyms": [
+        "Storage mixin",
+        "Dead blob pruning",
+        "Cashier refill"
+      ],
+      "description": "Backend includes blob-storage mixin endpoints for syncing authorized gateway principals, checking live blobs, listing/pruning dead blobs, and refilling the storage cashier canister with cycles.",
+      "reqIds": [],
+      "version": 1
+    },
+    {
+      "id": "IF-24",
+      "title": "User approval workflow APIs (backend)",
+      "synonyms": [
+        "requestApproval",
+        "listApprovals",
+        "setApproval"
+      ],
+      "description": "Backend supports an approval status registry (pending/approved/rejected) with admin management APIs and an `isCallerApproved` check, though UI integration is not shown here.",
+      "reqIds": [],
+      "version": 1
+    },
+    {
+      "id": "IF-25",
+      "title": "Backend data migration scaffolding",
+      "synonyms": [
+        "migration.run",
+        "Schema evolution"
+      ],
+      "description": "Backend includes a migration module to transform older stored adminConfig/settings schemas into the current expanded structures (including homepage and dashboard visuals).",
+      "reqIds": [],
+      "version": 1
+    },
+    {
+      "id": "IF-26",
+      "title": "Pre-generated homepage hero background image assets",
+      "synonyms": [
+        "Generated hero backgrounds",
+        "Homepage hero presets"
+      ],
+      "description": "Includes a set of pre-generated hero background images available under frontend/public/assets/generated for use as homepage hero visuals.",
+      "reqIds": [],
+      "version": 1
+    },
+    {
+      "id": "IF-27",
+      "title": "Admin site branding: logo upload and header rendering",
+      "synonyms": [
+        "LogoUploadForm",
+        "Site logo",
+        "Branding assets"
+      ],
+      "description": "Admins can upload/manage a site logo asset (stored via the blob storage integration) and the app header renders the configured logo as part of the site appearance settings.",
+      "reqIds": [],
+      "version": 1
+    },
+    {
+      "id": "feature-generate-a-new-hero-background-image-that-visually-resembles-an-orange-and-navy-blue-ankara-african-print-fabric-pattern-and-add-it-as-a-static-asset-under-frontend-public-assets-generated",
+      "title": "Generate a new hero background image that visually resembles an orange and navy-blue Ankara (African print) fabric pattern and add it as a static asset under frontend/public/assets/generated.",
+      "reqIds": [
+        "REQ-22"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-update-the-homepage-hero-background-fallback-so-that-when-no-admin-uploaded-hero-image-is-configured-the-hero-section-uses-the-generated-ankara-background-image-as-the-default-background-while-keeping-existing-overlay-opacity-behavior-for-readability",
+      "title": "Update the homepage hero background fallback so that when no admin-uploaded hero image is configured, the hero section uses the generated Ankara background image as the default background (while keeping existing overlay/opacity behavior for readability).",
+      "reqIds": [
+        "REQ-23"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-keep-all-existing-admin-controls-for-homepage-visuals-image-upload-overlay-color-overlay-opacity-and-gradient-color-field-working-so-the-logo-and-text-remain-editable-and-the-background-can-still-be-changed-by-admins-after-this-update",
+      "title": "Keep all existing admin controls for homepage visuals (image upload, overlay color, overlay opacity, and gradient/color field) working so the logo and text remain editable and the background can still be changed by admins after this update.",
+      "reqIds": [
+        "REQ-24"
+      ],
+      "version": 1
+    }
+  ],
+  "new_feature_requests": [
+    {
+      "id": "AR-1",
+      "summary": "Update homepage background/hero visuals to an orange and navy-blue Ankara (African print) fabric design to make the app feel more African-themed.",
+      "reqIds": [],
+      "status": "pending"
+    }
+  ],
+  "gameProjectType": "none",
+  "projectName": "Pocketflix",
+  "clarification_mode": "instant",
+  "clarification_rounds": 0
+}

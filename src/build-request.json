@@ -1,0 +1,88 @@
+{
+  "kind": "build_request",
+  "title": "Apply orange & navy Ankara-print hero background for a more African-themed homepage",
+  "priority": "normal",
+  "requirements": [
+    {
+      "id": "REQ-22",
+      "text": "Generate a new hero background image that visually resembles an orange and navy-blue Ankara (African print) fabric pattern and add it as a static asset under frontend/public/assets/generated.",
+      "target": "frontend",
+      "source": {
+        "messageIds": [
+          "msg-1"
+        ],
+        "quotes": [
+          "Design the background with orange and navy blue print Ankara fabric design to make the app look more African themed"
+        ]
+      },
+      "acceptanceCriteria": [
+        "A new image file exists at frontend/public/assets/generated/hero-bg-ankara-orange-navy-print.dim_2400x1350.png",
+        "The image is a seamless-looking Ankara-inspired fabric print with a dominant orange + navy palette and high visual contrast suitable for a hero background"
+      ]
+    },
+    {
+      "id": "REQ-23",
+      "text": "Update the homepage hero background fallback so that when no admin-uploaded hero image is configured, the hero section uses the generated Ankara background image as the default background (while keeping existing overlay/opacity behavior for readability).",
+      "target": "frontend",
+      "source": {
+        "messageIds": [
+          "msg-1",
+          "msg-2"
+        ],
+        "quotes": [
+          "Design the background with orange and navy blue print Ankara fabric design to make the app look more African themed",
+          "Start the build"
+        ]
+      },
+      "acceptanceCriteria": [
+        "If adminConfig.homepageVisuals.heroImage is not set, the HomePage hero renders with background image /assets/generated/hero-bg-ankara-orange-navy-print.dim_2400x1350.png",
+        "If adminConfig.homepageVisuals.heroImage is set, the uploaded image continues to take precedence (no regression)",
+        "Hero text remains readable due to the existing overlay color + opacity logic"
+      ]
+    },
+    {
+      "id": "REQ-24",
+      "text": "Keep all existing admin controls for homepage visuals (image upload, overlay color, overlay opacity, and gradient/color field) working so the logo and text remain editable and the background can still be changed by admins after this update.",
+      "target": "frontend",
+      "source": {
+        "messageIds": [
+          "msg-1"
+        ],
+        "quotes": [
+          "Design the background with orange and navy blue print Ankara fabric design to make the app look more African themed"
+        ]
+      },
+      "acceptanceCriteria": [
+        "Admins can still upload a hero background image from the Admin Dashboard and see it on the homepage hero after saving",
+        "Admins can still adjust overlay color/opacity and see the effect on the homepage hero",
+        "No user-facing text is changed away from English as part of this update"
+      ]
+    }
+  ],
+  "constraints": [
+    "Do not modify files under frontend/src/components/ui (read-only components).",
+    "Do not modify frontend/src/hooks/useInternetIdentity.ts, frontend/src/hooks/useInternetIdentity.tsx, frontend/src/hooks/useActor.ts, or frontend/src/main.tsx (immutable paths).",
+    "Backend remains single-actor; no backend changes are required for this request."
+  ],
+  "nonGoals": [
+    "Changing backend data models or performing state migrations.",
+    "Adding new admin UI for selecting from multiple built-in background presets (only update the default fallback behavior).",
+    "Changing non-hero areas of the site (admin dashboard visuals, video cards, quiz UI) beyond what is necessary to support the new hero background asset."
+  ],
+  "imageRequirements": {
+    "required": [
+      "Ankara-inspired fabric print background with dominant orange and navy colors, high-contrast geometric motifs (hero-bg-ankara-orange-navy-print.dim_2400x1350.png)"
+    ],
+    "edits": []
+  },
+  "userProfileUpdate": {
+    "goalsToAdd": [],
+    "goalsToRemove": [],
+    "preferencesToAdd": [],
+    "preferencesToRemove": [],
+    "miscToAdd": [],
+    "miscToRemove": [],
+    "fieldsToSet": {},
+    "fieldsToDelete": []
+  }
+}
