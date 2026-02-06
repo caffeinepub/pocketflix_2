@@ -14,6 +14,7 @@ export function useGetSettingsData() {
       return actor.getSettingsData();
     },
     enabled: !!actor && !isFetching,
+    retry: false, // Disable automatic retries so errors surface promptly
   });
 }
 

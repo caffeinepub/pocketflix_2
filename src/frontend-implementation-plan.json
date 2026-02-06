@@ -1,25 +1,6 @@
 {
   "kind": "implementation_plan",
   "version": "1.0",
-  "title": "Surface HomepageVisualsForm in Admin Dashboard “Home Page” tab",
-  "requirements": [
-    {
-      "id": "REQ-31",
-      "summary": "Expose the existing HomepageVisualsForm (hero/background image upload + overlay/fallback controls) in the Admin Dashboard “Home Page” tab so it’s easy to discover and use without removing existing home content editing.",
-      "acceptanceCriteria": [
-        "When an admin opens Admin Dashboard → “Home Page”, there is a visible section for hero/background visuals that includes the hero background image upload control (using the existing `HomepageVisualsForm`).",
-        "An admin can upload a hero background image from the “Home Page” tab and save successfully, and the uploaded image remains visible on refresh (based on settings data).",
-        "An admin can remove the uploaded hero background image from the “Home Page” tab and save successfully, and the UI indicates the default background will be restored.",
-        "No functionality is removed: existing homepage content editing (text) remains available in the “Home Page” tab, and the hero visuals controls (overlay color, overlay opacity, fallback gradient) remain usable.",
-        "All user-facing helper text in the surfaced form remains in English and clearly explains: uploading replaces the default background; removing restores the default after saving."
-      ],
-      "file_operations": [
-        {
-          "path": "frontend/src/pages/AdminDashboardPage.tsx",
-          "operation": "modify",
-          "description": "Update the “Home Page” tab content to include an easy-to-discover “Hero / Background Visuals” section that renders the existing HomepageVisualsForm (which provides hero background image upload/removal plus overlay color/opacity and fallback gradient controls). Keep the existing HomeContentEditor entry point intact and do not remove HomepageVisualsForm from the “Appearance” tab (no functionality removed). Verify the component's usage instructions before implementing."
-        }
-      ]
-    }
-  ]
+  "title": "Untitled request",
+  "requirements": []
 }

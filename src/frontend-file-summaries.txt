@@ -1,7 +1,7 @@
 {
   "frontend/src/App.tsx": "Main application component with TanStack Router setup, route definitions (home, account, admin) using properly named component functions for route guards, role-based access control, and theme provider integration.",
-  "frontend/src/hooks/useQueries.ts": "React Query hooks for all backend operations including videos, categories, quizzes, leaderboard, user management, settings, admin configuration, homepage visuals, dashboard visuals, and logo upload with proper cache invalidation.",
-  "frontend/src/hooks/useCurrentUser.ts": "Custom hook that provides current user authentication state, admin role status, user profile, and loading states for route guards and conditional UI rendering.",
+  "frontend/src/hooks/useQueries.ts": "React Query hooks for all backend operations with useGetSettingsData configured to disable automatic retries for prompt error surfacing.",
+  "frontend/src/hooks/useCurrentUser.ts": "Custom hook that provides current user authentication state, admin role status with improved enum handling for both string and object variants, user profile, and loading states for route guards and conditional UI rendering.",
   "frontend/src/hooks/useTheme.ts": "Hook that loads theme settings from backend and applies custom colors to CSS variables for dynamic theming.",
   "frontend/src/utils/privacy.ts": "Utility function to anonymize user identifiers for privacy-preserving leaderboard display.",
   "frontend/src/components/layout/AppLayout.tsx": "Main layout wrapper component that includes header, footer, and applies theme settings to all pages.",
@@ -16,7 +16,7 @@
   "frontend/src/components/quizzes/VideoQuizSection.tsx": "Component that loads and displays available quizzes for a video, only visible to logged-in users.",
   "frontend/src/components/quizzes/QuizTakingCard.tsx": "Interactive quiz interface with question/answer selection, submission, score display, and post-quiz donation modal trigger.",
   "frontend/src/components/leaderboard/LeaderboardSection.tsx": "Leaderboard card component displaying top 5 quiz results with medals for top 3 positions, anonymized user labels, scores, and timestamps.",
-  "frontend/src/components/home/HomeContent.tsx": "Hero content component rendering admin-configurable hero heading, middle text (homePageSubText), and supporting text with admin-only edit button.",
+  "frontend/src/components/home/HomeContent.tsx": "Hero content component that accepts text props (heading, subtext, supporting text) with defaults and renders admin edit button without issuing its own settings query.",
   "frontend/src/components/admin/HomeContentEditor.tsx": "Dialog form for admins to edit all homepage text including hero heading, middle text, hero supporting text, featured videos heading, and empty state messages with scrollable content area.",
   "frontend/src/components/admin/DonationLinkForm.tsx": "Admin form to configure Selar donation link with validation and persistence.",
   "frontend/src/components/admin/CategoriesManager.tsx": "Admin interface to add and delete video categories with confirmation dialogs.",
@@ -26,12 +26,13 @@
   "frontend/src/components/admin/QuizEditor.tsx": "Comprehensive quiz editor with multiple questions, multiple-choice answers, correct answer selection, and validation.",
   "frontend/src/components/admin/UserManagementPanel.tsx": "Admin panel to view all users with anonymized identifiers and update user status (active/blocked).",
   "frontend/src/components/admin/ThemeSettingsForm.tsx": "Admin form to customize primary (orange) and secondary (navy) theme colors with color pickers.",
-  "frontend/src/pages/HomePage.tsx": "Landing page with hero section that deterministically uses admin-uploaded hero image when set, otherwise falls back to the Ankara pattern background (/assets/generated/hero-bg-ankara-orange-navy-print.dim_2400x1350.png), with consistent overlay application and categorized video tabs.",
+  "frontend/src/pages/HomePage.tsx": "Landing page with hero section that safely handles admin-uploaded hero images or falls back to the African pattern background, includes error state with retry button, and passes text props to HomeContent to prevent duplicate queries.",
   "frontend/src/pages/AccountPage.tsx": "User account page displaying personal quiz history and scores.",
   "frontend/src/pages/AdminDashboardPage.tsx": "Admin dashboard with tabbed interface for managing videos, categories, quizzes, users, donation link, home content (including both text editing and hero/background visuals with image upload), and appearance settings including logo upload, featuring a configurable header background from dashboard visuals.",
   "frontend/src/index.css": "Global styles with OKLCH color system defining orange primary and very dark navy secondary colors for both light and dark modes.",
   "frontend/tailwind.config.js": "Tailwind configuration with custom color tokens, Inter font family, and extended theme settings for the Pocketflix design system.",
   "frontend/src/components/admin/HomepageVisualsForm.tsx": "Admin form to configure homepage hero visuals with image upload that overrides the default Ankara pattern background, explicit helper text explaining the default/upload/remove behavior, and proper payload construction that omits heroImage when null to restore the default.",
   "frontend/src/components/admin/DashboardVisualsForm.tsx": "Admin form to configure dashboard visuals including header background color/gradient, accent color, overlay color, and overlay opacity settings.",
-  "frontend/src/components/admin/LogoUploadForm.tsx": "Admin form to upload and manage site logo with image preview, upload progress tracking, and remove/reset functionality using ExternalBlob."
+  "frontend/src/components/admin/LogoUploadForm.tsx": "Admin form to upload and manage site logo with image preview, upload progress tracking, and remove/reset functionality using ExternalBlob.",
+  "frontend/src/utils/color.ts": "Utility functions for validating hex colors, converting hex to RGB with fallback, and clamping numeric values to safe ranges."
 }

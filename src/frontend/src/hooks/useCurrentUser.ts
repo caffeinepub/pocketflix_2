@@ -21,7 +21,9 @@ export function useCurrentUser() {
     retry: false,
   });
 
-  const isAdmin = roleQuery.data === 'admin';
+  // Handle both enum object and string value
+  const roleValue = roleQuery.data;
+  const isAdmin = roleValue === 'admin' || (roleValue && typeof roleValue === 'object' && (roleValue as any).__kind__ === 'admin');
   const isLoading = actorFetching || roleQuery.isLoading || profileLoading;
 
   return {

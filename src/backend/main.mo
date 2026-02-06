@@ -15,8 +15,6 @@ import Storage "blob-storage/Storage";
 import MixinStorage "blob-storage/Mixin";
 import UserApproval "user-approval/approval";
 
-// Data migration from older version without logo support.
-
 actor {
   public type Video = {
     id : Text;
@@ -41,7 +39,7 @@ actor {
 
   public type HomepageVisuals = {
     heroBackgroundColor : Text;
-    heroImage : ?Storage.ExternalBlob; // Optional hero image
+    heroImage : ?Storage.ExternalBlob;
     backgroundColorOverlay : Text;
     overlayOpacity : Nat;
     headingColor : Text;
@@ -312,7 +310,7 @@ actor {
     };
     let defaultHomepageVisuals = {
       heroBackgroundColor = "linear-gradient(227deg, #ff9500 0%, #0e1c45 100%)";
-      heroImage = null; // No default image
+      heroImage = null;
       backgroundColorOverlay = "#1A2C45";
       overlayOpacity = 80;
       headingColor = "#fff";
@@ -356,7 +354,7 @@ actor {
       theme = defaultTheme;
       homepageVisuals = defaultHomepageVisuals;
       dashboardVisuals = defaultDashboardVisuals;
-      logo = null; // No default logo
+      logo = null;
     };
     {
       videos = videoArray;
@@ -412,7 +410,7 @@ actor {
           theme = defaultTheme;
           homepageVisuals = {
             heroBackgroundColor = "linear-gradient(227deg, #ff9500 0%, #0e1c45 100%)";
-            heroImage = null; // No default image
+            heroImage = null;
             backgroundColorOverlay = "#1A2C45";
             overlayOpacity = 80;
             headingColor = "#fff";
@@ -493,7 +491,7 @@ actor {
           theme = defaultTheme;
           homepageVisuals = {
             heroBackgroundColor = "linear-gradient(227deg, #ff9500 0%, #0e1c45 100%)";
-            heroImage = null; // No default image
+            heroImage = null;
             backgroundColorOverlay = "#1A2C45";
             overlayOpacity = 80;
             headingColor = "#fff";
@@ -570,7 +568,7 @@ actor {
           theme = theme;
           homepageVisuals = {
             heroBackgroundColor = "linear-gradient(227deg, #ff9500 0%, #0e1c45 100%)";
-            heroImage = null; // No default image
+            heroImage = null;
             backgroundColorOverlay = "#1A2C45";
             overlayOpacity = 80;
             headingColor = "#fff";
@@ -817,7 +815,7 @@ actor {
     };
   };
 
-  public query func getLeaderboard() : async [QuizResult] {
+  public query ({ caller }) func getLeaderboard() : async [QuizResult] {
     quizResults.toArray().sort();
   };
 

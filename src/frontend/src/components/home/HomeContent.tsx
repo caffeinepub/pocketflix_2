@@ -1,19 +1,22 @@
-import { useGetSettingsData } from '../../hooks/useQueries';
 import { useCurrentUser } from '../../hooks/useCurrentUser';
 import { Button } from '@/components/ui/button';
 import { Edit } from 'lucide-react';
 import { useState } from 'react';
 import HomeContentEditor from '../admin/HomeContentEditor';
 
-export default function HomeContent() {
-  const { data: settingsData } = useGetSettingsData();
+interface HomeContentProps {
+  homeHeroHeading?: string;
+  homePageSubText?: string;
+  homeHeroSupportingText?: string;
+}
+
+export default function HomeContent({ 
+  homeHeroHeading = 'Learn on Your Terms',
+  homePageSubText = 'Video-based learning for students and lifelong learners.',
+  homeHeroSupportingText = 'Short video lessons designed for busy people. No stress, just effective learning at your pace.'
+}: HomeContentProps) {
   const { isAdmin } = useCurrentUser();
   const [isEditing, setIsEditing] = useState(false);
-
-  const adminConfig = settingsData?.adminConfig;
-  const homeHeroHeading = adminConfig?.homeHeroHeading || 'Learn on Your Terms';
-  const homePageSubText = adminConfig?.homePageSubText || 'Video-based learning for students and lifelong learners.';
-  const homeHeroSupportingText = adminConfig?.homeHeroSupportingText || 'Short video lessons designed for busy people. No stress, just effective learning at your pace.';
 
   return (
     <div className="relative">

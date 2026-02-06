@@ -1,26 +1,4 @@
 {
   "kind": "feature_evidence_report",
-  "features": [
-    {
-      "featureId": "feature-update-the-admin-dashboard-ui-so-admins-can-clearly-find-and-use-the-homepage-hero-background-image-upload-control-from-the-home-page-tab-not-only-under-appearance-by-surfacing-the-existing-homepagevisualsform-in-an-easy-to-discover-location-within-the-home-page-tab",
-      "featureTitle": "Update the Admin Dashboard UI so admins can clearly find and use the homepage hero/background image upload control from the “Home Page” tab (not only under “Appearance”), by surfacing the existing `HomepageVisualsForm` in an easy-to-discover location within the “Home Page” tab.",
-      "files": [
-        "frontend/src/pages/AdminDashboardPage.tsx"
-      ],
-      "components": [
-        "authorization@4.0.0",
-        "blob-storage@4.0.0",
-        "user-approval@3.0.0",
-        "core-infrastructure@1.0.2",
-        "shadcn-ui@1.0.0",
-        "build-template-react@1.0.0",
-        "initial-app@1.0.0",
-        "github-export-icp-cli@1.0.0"
-      ],
-      "testIds": [
-        "REQ-31"
-      ],
-      "confidence": "high"
-    }
-  ]
+  "features": []
 }

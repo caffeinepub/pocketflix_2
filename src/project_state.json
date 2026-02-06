@@ -1,6 +1,6 @@
 {
   "schemaVersion": "1.0.0",
-  "projectStateVersion": 20,
+  "projectStateVersion": 24,
   "summary": "Pocketflix is an Internet Computer (ICP) web app for a curated, categorized video-learning catalog (YouTube embeds) with optional per-video quizzes. It uses Internet Identity authentication with role-based admin access. Admins manage categories, videos (including uploaded thumbnails via blob storage), quizzes, users (active/blocked), donation link, and site appearance/content (theme colors, homepage text, homepage hero visuals, and admin dashboard visuals). Users can take quizzes, get scored server-side, see their quiz history, and appear on a privacy-preserving public leaderboard (UI shows top 5).",
   "architectural_notes": [
     "Frontend is a React + TypeScript SPA using TanStack Router for routing and simple route-guard components for /account and /admin.",
@@ -430,6 +430,30 @@
       "title": "Update the Admin Dashboard UI so admins can clearly find and use the homepage hero/background image upload control from the “Home Page” tab (not only under “Appearance”), by surfacing the existing `HomepageVisualsForm` in an easy-to-discover location within the “Home Page” tab.",
       "reqIds": [
         "REQ-31"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-fix-the-homepage-hero-background-fallback-so-it-references-an-existing-generated-static-asset-in-the-repo-and-does-not-reference-missing-filenames-ensuring-the-landing-page-renders-even-when-no-admin-hero-image-is-configured",
+      "title": "Fix the HomePage hero background fallback so it references an existing generated static asset in the repo (and does not reference missing filenames), ensuring the landing page renders even when no admin hero image is configured.",
+      "reqIds": [
+        "REQ-32"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-make-the-homepage-hero-background-style-computation-resilient-to-unexpected-adminconfig-homepagevisuals-values-so-that-invalid-color-formats-or-unexpected-heroimage-shapes-cannot-crash-the-landing-page-e-g-safely-handle-cases-where-heroimage-does-not-have-getdirecturl-and-safely-handle-non-hex-overlay-colors",
+      "title": "Make the HomePage hero background style computation resilient to unexpected adminConfig/homepageVisuals values so that invalid color formats or unexpected heroImage shapes cannot crash the landing page (e.g., safely handle cases where heroImage does not have getDirectURL, and safely handle non-hex overlay colors).",
+      "reqIds": [
+        "REQ-33"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-add-a-user-facing-error-state-on-the-landing-page-for-settings-aggregation-load-failures-getsettingsdata-so-users-see-a-clear-message-and-a-retry-action-instead-of-an-indefinite-loading-blank-experience",
+      "title": "Add a user-facing error state on the landing page for settings aggregation load failures (getSettingsData), so users see a clear message and a retry action instead of an indefinite loading/blank experience.",
+      "reqIds": [
+        "REQ-34"
       ],
       "version": 1
     }

@@ -1,34 +1,23 @@
 {
   "kind": "coverage_report",
   "version": "1.0",
-  "generatedAt": "2026-02-05T22:21:59.536Z",
+  "generatedAt": "2026-02-06T00:10:58.664Z",
   "sources": {
     "buildRequest": true,
     "implementationPlan": true
   },
   "requirements": {
-    "total": 1,
-    "implemented": 1,
-    "items": [
-      {
-        "id": "REQ-31",
-        "summary": "Update the Admin Dashboard UI so admins can clearly find and use the homepage hero/background image upload control from the “Home Page” tab (not only under “Appearance”), by surfacing the existing `HomepageVisualsForm` in an easy-to-discover location within the “Home Page” tab.",
-        "status": "implemented",
-        "plannedFiles": [
-          "frontend/src/pages/AdminDashboardPage.tsx"
-        ],
-        "matchedFiles": [
-          "frontend/src/pages/AdminDashboardPage.tsx"
-        ]
-      }
-    ]
+    "total": 0,
+    "implemented": 0,
+    "items": []
   },
   "changedFiles": [
+    "backend/main.mo",
     "build-request.json",
     "feature_evidence.json",
     "frontend-file-summaries.txt",
     "frontend-implementation-plan.json",
-    "frontend/src/pages/AdminDashboardPage.tsx",
+    "frontend/src/hooks/useCurrentUser.ts",
     "project_state.json",
     "scratch/component-selection.json",
     "spec.md",
