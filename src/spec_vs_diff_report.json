@@ -1,36 +1,61 @@
 {
   "kind": "spec_vs_diff_report",
   "version": "1.0",
-  "generatedAt": "2026-02-06T00:58:01.397Z",
-  "summary": "Diff adds an “Admin Dashboard” navigation link (desktop + mobile) gated on confirmed admin status, and defines/guards an /admin route that renders AdminDashboardPage when isAdmin is true. It also changes how admin status is detected (new react-query isCallerAdmin call) and adds loading behavior while admin status resolves. The BuildRequest primarily asked for redeploying the existing draft build to production; that deployment action is not evidenced in the diff.",
-  "missing_requirements": [
-    {
-      "id": "REQ-1",
-      "requirement": "Republish/redeploy the current draft build to production so the live app frontend matches the draft (including the navigation menu that contains the “Admin Dashboard” item for admin users).",
-      "reason": "The diff only shows source code changes; there is no evidence of any republish/redeploy/release action or production build synchronization mechanism.",
-      "evidence": [
-        "project_state.json",
-        "frontend/src/App.tsx",
-        "frontend/src/components/layout/AppHeader.tsx"
-      ]
-    }
-  ],
+  "generatedAt": "2026-02-06T01:13:13.940Z",
+  "summary": "BuildRequest specifies no requirements or acceptance criteria. The diff shows multiple functional changes across backend and frontend (settings/theme/logo/admin detection, loading states, retry logic, etc.), which are therefore unrequested relative to the provided BuildRequest.",
+  "missing_requirements": [],
   "hallucinated_features": [
     {
-      "description": "Changed admin/authorization detection logic to call backend actor.isCallerAdmin() via a new React Query (including new query keying, retry/staleTime behavior, and isAdminLoaded flag) and introduced a loading screen while admin status loads.",
-      "reason": "BuildRequest non-goals explicitly say not to change role/authorization logic or admin permissions behavior beyond ensuring production reflects the current draft; the diff introduces new logic/behavior rather than just redeploying the existing draft build.",
+      "description": "Backend data model and storage additions/expansions for videos, settings/adminConfig (including visuals and optional logo), quizzes, quiz results, and user profiles, plus authorization/storage mixins.",
+      "reason": "No requirements were provided in the BuildRequest, so these backend feature changes are not traceable to an explicit request.",
       "evidence": [
-        "frontend/src/hooks/useCurrentUser.ts",
-        "frontend/src/App.tsx"
+        "backend/main.mo"
+      ]
+    },
+    {
+      "description": "Header updated to support displaying an uploaded logo from settings with fallback image, plus responsive mobile menu behavior and conditional admin link display based on loaded admin status.",
+      "reason": "No requirements were provided in the BuildRequest.",
+      "evidence": [
+        "frontend/src/components/layout/AppHeader.tsx"
+      ]
+    },
+    {
+      "description": "App layout introduces a theme-loading spinner state and continues rendering with default theme on error.",
+      "reason": "No requirements were provided in the BuildRequest.",
+      "evidence": [
+        "frontend/src/components/layout/AppLayout.tsx"
+      ]
+    },
+    {
+      "description": "React Query hook useGetSettingsData adds retry logic and query enabling conditions tied to actor availability/fetching state; other hooks invalidate settingsData on mutations.",
+      "reason": "No requirements were provided in the BuildRequest.",
+      "evidence": [
+        "frontend/src/hooks/useQueries.ts"
+      ]
+    },
+    {
+      "description": "Theme hook loads theme from backend settings and applies primary/secondary colors to CSS variables.",
+      "reason": "No requirements were provided in the BuildRequest.",
+      "evidence": [
+        "frontend/src/hooks/useTheme.ts"
+      ]
+    },
+    {
+      "description": "Multiple additional frontend features described in summaries (admin detection improvements, privacy anonymization, profile setup modal, access denied screen, donation modals, leaderboard, quiz UI, admin editors/managers).",
+      "reason": "No requirements were provided in the BuildRequest; also these features are not evidenced directly by code diffs here beyond the summarized file list.",
+      "evidence": [
+        "frontend-file-summaries.txt"
       ]
     }
   ],
-  "confidence": 0.62,
+  "confidence": 0.68,
   "changed_files": [
+    "backend/main.mo",
     "frontend-file-summaries.txt",
-    "frontend/src/App.tsx",
     "frontend/src/components/layout/AppHeader.tsx",
-    "frontend/src/hooks/useCurrentUser.ts",
+    "frontend/src/components/layout/AppLayout.tsx",
+    "frontend/src/hooks/useQueries.ts",
+    "frontend/src/hooks/useTheme.ts",
     "project_state.json"
   ]
 }

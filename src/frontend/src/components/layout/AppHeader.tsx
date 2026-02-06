@@ -11,7 +11,13 @@ export default function AppHeader() {
   const { isAuthenticated, isAdmin, isAdminLoaded } = useCurrentUser();
   const { data: settingsData } = useGetSettingsData();
 
-  const logoUrl = settingsData?.adminConfig?.logo?.getDirectURL() || '/assets/generated/pocketflix-logo.dim_512x512.png';
+  // Safely get logo URL with fallback
+  const logoUrl = settingsData?.adminConfig?.logo && 
+    typeof settingsData.adminConfig.logo === 'object' && 
+    'getDirectURL' in settingsData.adminConfig.logo &&
+    typeof settingsData.adminConfig.logo.getDirectURL === 'function'
+      ? settingsData.adminConfig.logo.getDirectURL()
+      : '/assets/generated/pocketflix-logo.dim_512x512.png';
 
   // Only show admin link when we've confirmed admin status
   const showAdminLink = isAuthenticated && isAdminLoaded && isAdmin;
@@ -25,6 +31,10 @@ export default function AppHeader() {
               src={logoUrl} 
               alt="Pocketflix" 
               className="h-10 w-10 object-contain"
+              onError={(e) => {
+                // Fallback if image fails to load
+                e.currentTarget.src = '/assets/generated/pocketflix-logo.dim_512x512.png';
+              }}
             />
             <span className="text-xl font-bold bg-gradient-to-r from-[var(--theme-primary,#fb8c00)] to-[var(--theme-secondary,#04032e)] bg-clip-text text-transparent">
               Pocketflix

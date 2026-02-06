@@ -4,21 +4,12 @@
   "summary": "New project",
   "architectural_notes": [],
   "known_issues": [
-    "Live app navigation menu missing Admin Panel link while draft shows it (draft/live build mismatch or deployment not updated)."
+    "Draft app (Draft Version 11) fails to load: 'unable to load the page'"
   ],
   "isFixRequest": true,
-  "existing_features": [
-    {
-      "id": "feature-republish-redeploy-the-current-draft-build-to-production-so-the-live-app-frontend-matches-the-draft-including-the-navigation-menu-that-contains-the-admin-dashboard-item-for-admin-users",
-      "title": "Republish/redeploy the current draft build to production so the live app frontend matches the draft (including the navigation menu that contains the “Admin Dashboard” item for admin users).",
-      "reqIds": [
-        "REQ-1"
-      ],
-      "version": 1
-    }
-  ],
+  "existing_features": [],
   "new_feature_requests": [],
-  "projectName": "Fix live app navigation to show Admin Dashboard link",
+  "projectName": "Untitled request",
   "clarification_mode": "instant",
   "clarification_rounds": 0
 }

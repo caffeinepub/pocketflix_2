@@ -816,6 +816,9 @@ actor {
   };
 
   public query ({ caller }) func getLeaderboard() : async [QuizResult] {
+    if (not (AccessControl.hasPermission(accessControlState, caller, #user))) {
+      Runtime.trap("Unauthorized: Only registered users can view the leaderboard");
+    };
     quizResults.toArray().sort();
   };
 
