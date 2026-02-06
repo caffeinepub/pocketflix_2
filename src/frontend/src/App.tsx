@@ -39,9 +39,9 @@ const accountRoute = createRoute({
 });
 
 function AdminRouteComponent() {
-  const { isAdmin, isLoading } = useCurrentUser();
+  const { isAdmin, isLoading, isAdminLoaded } = useCurrentUser();
   
-  if (isLoading) {
+  if (isLoading || !isAdminLoaded) {
     return (
       <div className="flex items-center justify-center min-h-screen">
         <div className="text-lg">Loading...</div>

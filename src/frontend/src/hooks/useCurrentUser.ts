@@ -2,7 +2,6 @@ import { useQuery } from '@tanstack/react-query';
 import { useActor } from './useActor';
 import { useInternetIdentity } from './useInternetIdentity';
 import { useGetCallerUserProfile } from './useQueries';
-import type { UserRole, UserProfile } from '../backend';
 
 export function useCurrentUser() {
   const { actor, isFetching: actorFetching } = useActor();
@@ -11,26 +10,26 @@ export function useCurrentUser() {
 
   const isAuthenticated = !!identity;
 
-  const roleQuery = useQuery<UserRole>({
-    queryKey: ['currentUserRole'],
+  // Use isCallerAdmin for direct admin status check
+  const adminQuery = useQuery<boolean>({
+    queryKey: ['isCallerAdmin', identity?.getPrincipal().toString()],
     queryFn: async () => {
       if (!actor) throw new Error('Actor not available');
-      return actor.getCallerUserRole();
+      return actor.isCallerAdmin();
     },
     enabled: !!actor && !actorFetching && isAuthenticated,
     retry: false,
+    staleTime: 0, // Always refetch to ensure fresh admin status
   });
 
-  // Handle both enum object and string value
-  const roleValue = roleQuery.data;
-  const isAdmin = roleValue === 'admin' || (roleValue && typeof roleValue === 'object' && (roleValue as any).__kind__ === 'admin');
-  const isLoading = actorFetching || roleQuery.isLoading || profileLoading;
+  const isAdmin = adminQuery.data === true;
+  const isLoading = actorFetching || adminQuery.isLoading || profileLoading;
 
   return {
     isAuthenticated,
     isAdmin,
     isLoading,
     userProfile,
-    role: roleQuery.data,
+    isAdminLoaded: adminQuery.isFetched,
   };
 }

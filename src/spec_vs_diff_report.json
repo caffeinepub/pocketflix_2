@@ -1,30 +1,35 @@
 {
   "kind": "spec_vs_diff_report",
   "version": "1.0",
-  "generatedAt": "2026-02-06T00:10:58.661Z",
-  "summary": "BuildRequest contains no stated requirements or acceptance criteria, so no missing requirements can be identified. The diff shows implementation changes (notably frontend role enum handling and documentation/state summary updates) that were not requested in the BuildRequest.",
-  "missing_requirements": [],
+  "generatedAt": "2026-02-06T00:58:01.397Z",
+  "summary": "Diff adds an “Admin Dashboard” navigation link (desktop + mobile) gated on confirmed admin status, and defines/guards an /admin route that renders AdminDashboardPage when isAdmin is true. It also changes how admin status is detected (new react-query isCallerAdmin call) and adds loading behavior while admin status resolves. The BuildRequest primarily asked for redeploying the existing draft build to production; that deployment action is not evidenced in the diff.",
+  "missing_requirements": [
+    {
+      "id": "REQ-1",
+      "requirement": "Republish/redeploy the current draft build to production so the live app frontend matches the draft (including the navigation menu that contains the “Admin Dashboard” item for admin users).",
+      "reason": "The diff only shows source code changes; there is no evidence of any republish/redeploy/release action or production build synchronization mechanism.",
+      "evidence": [
+        "project_state.json",
+        "frontend/src/App.tsx",
+        "frontend/src/components/layout/AppHeader.tsx"
+      ]
+    }
+  ],
   "hallucinated_features": [
     {
-      "description": "Improved current-user role detection to handle both enum object and string variants when determining admin status.",
-      "reason": "No requirements were provided in the BuildRequest; this behavior change is not tied to any requested feature.",
+      "description": "Changed admin/authorization detection logic to call backend actor.isCallerAdmin() via a new React Query (including new query keying, retry/staleTime behavior, and isAdminLoaded flag) and introduced a loading screen while admin status loads.",
+      "reason": "BuildRequest non-goals explicitly say not to change role/authorization logic or admin permissions behavior beyond ensuring production reflects the current draft; the diff introduces new logic/behavior rather than just redeploying the existing draft build.",
       "evidence": [
-        "frontend/src/hooks/useCurrentUser.ts"
-      ]
-    },
-    {
-      "description": "Updates to project documentation/state summaries describing app features and architecture.",
-      "reason": "No requirements were provided in the BuildRequest; these summary/state updates were not requested.",
-      "evidence": [
-        "frontend-file-summaries.txt",
-        "project_state.json"
+        "frontend/src/hooks/useCurrentUser.ts",
+        "frontend/src/App.tsx"
       ]
     }
   ],
   "confidence": 0.62,
   "changed_files": [
-    "backend/main.mo",
     "frontend-file-summaries.txt",
+    "frontend/src/App.tsx",
+    "frontend/src/components/layout/AppHeader.tsx",
     "frontend/src/hooks/useCurrentUser.ts",
     "project_state.json"
   ]

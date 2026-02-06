@@ -1,10 +1,36 @@
 {
   "kind": "build_request",
-  "title": "Untitled request",
+  "title": "Fix live app navigation to show Admin Dashboard link",
   "priority": "normal",
-  "requirements": [],
-  "constraints": [],
-  "nonGoals": [],
+  "requirements": [
+    {
+      "id": "REQ-1",
+      "text": "Republish/redeploy the current draft build to production so the live app frontend matches the draft (including the navigation menu that contains the “Admin Dashboard” item for admin users).",
+      "target": "frontend",
+      "source": {
+        "messageIds": [
+          "recent-messages"
+        ],
+        "quotes": [
+          "The admin panel is showing in the draft app, but not showing in the live app",
+          "No, in the live app, there is no Admin Panel in the menu where \"Home\" and \"Account\" are located",
+          "Yes"
+        ]
+      },
+      "acceptanceCriteria": [
+        "In the live app (production), after logging in as an admin user, the top navigation menu contains an “Admin Dashboard” link alongside “Home” and “My Account”.",
+        "Clicking the “Admin Dashboard” link in the live app navigates to /admin and renders the AdminDashboardPage (not an access denied screen).",
+        "The draft and live app show the same navigation items for the same authenticated admin user."
+      ]
+    }
+  ],
+  "constraints": [
+    "Do not edit any files under frontend/src/components/ui or any paths listed in frontend.immutablePaths."
+  ],
+  "nonGoals": [
+    "Do not change role/authorization logic or admin permissions behavior beyond ensuring the production build reflects the current draft.",
+    "Do not add new admin features or new routes beyond fixing the missing menu item in live."
+  ],
   "imageRequirements": {
     "required": [],
     "edits": []

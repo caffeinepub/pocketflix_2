@@ -1,6 +1,38 @@
 {
   "kind": "implementation_plan",
   "version": "1.0",
-  "title": "Untitled request",
-  "requirements": []
+  "title": "Ensure production navigation shows Admin Dashboard for admin users",
+  "requirements": [
+    {
+      "id": "REQ-1",
+      "summary": "Align live (production) navigation with draft by ensuring admin detection is reliable and the header/menu consistently renders the “Admin Dashboard” link and routes to /admin for admin users.",
+      "acceptanceCriteria": [
+        "In the live app (production), after logging in as an admin user, the top navigation menu contains an “Admin Dashboard” link alongside “Home” and “My Account”.",
+        "Clicking the “Admin Dashboard” link in the live app navigates to /admin and renders the AdminDashboardPage (not an access denied screen).",
+        "The draft and live app show the same navigation items for the same authenticated admin user."
+      ],
+      "file_operations": [
+        {
+          "path": "frontend/src/hooks/useCurrentUser.ts",
+          "operation": "modify",
+          "description": "Update admin detection to use the backend capability that directly reports admin status (e.g., isCallerAdmin) and adjust React Query keys/enabling to avoid stale role/admin state after login/logout so production reliably identifies admins."
+        },
+        {
+          "path": "frontend/src/components/layout/AppHeader.tsx",
+          "operation": "modify",
+          "description": "Ensure the top navigation and mobile sheet menu render the “Admin Dashboard” Link when the user is authenticated and confirmed as admin (and avoid transient missing menu items due to loading state)."
+        },
+        {
+          "path": "frontend/src/App.tsx",
+          "operation": "modify",
+          "description": "Confirm the /admin route guard uses the same updated admin detection and loading behavior as the header so admins are not incorrectly routed to the AccessDeniedScreen."
+        },
+        {
+          "path": "frontend/package.json",
+          "operation": "modify",
+          "description": "Bump the frontend app version (or equivalent build identifier) to force a fresh production frontend build artifact that includes the updated navigation/menu behavior."
+        }
+      ]
+    }
+  ]
 }

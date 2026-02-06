@@ -8,10 +8,13 @@ import { Button } from '@/components/ui/button';
 import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet';
 
 export default function AppHeader() {
-  const { isAuthenticated, isAdmin } = useCurrentUser();
+  const { isAuthenticated, isAdmin, isAdminLoaded } = useCurrentUser();
   const { data: settingsData } = useGetSettingsData();
 
   const logoUrl = settingsData?.adminConfig?.logo?.getDirectURL() || '/assets/generated/pocketflix-logo.dim_512x512.png';
+
+  // Only show admin link when we've confirmed admin status
+  const showAdminLink = isAuthenticated && isAdminLoaded && isAdmin;
 
   return (
     <header className="sticky top-0 z-50 w-full border-b border-border/40 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
@@ -43,7 +46,7 @@ export default function AppHeader() {
                 My Account
               </Link>
             )}
-            {isAdmin && (
+            {showAdminLink && (
               <Link 
                 to="/admin" 
                 className="text-sm font-medium transition-colors hover:text-primary"
@@ -80,7 +83,7 @@ export default function AppHeader() {
                     My Account
                   </Link>
                 )}
-                {isAdmin && (
+                {showAdminLink && (
                   <Link 
                     to="/admin" 
                     className="text-lg font-medium transition-colors hover:text-primary"
